@@ -1,0 +1,43 @@
+openapi: 3.0.0
+
+servers:
+  - url: https://127.0.0.1:5000
+    description: "Diagnoza na podstawie prześwietlenia klatki piersiowej"
+info:
+  description: "" 
+  version: "1.0.0"
+  title: "Diagnoza na podstawie prześwietlenia klatki piersiowej"
+  contact:
+    name: "Support"
+    email: s19375@pjwstk.edu.pl
+  license:
+    name: Creative Commons
+    url: "https://creativecommons.org/licenses/by/4.0/legalcode"
+paths:
+  /:
+    post:
+      tags:
+        - diagnoza
+      summary: "Diagnoza"
+      parameters:
+        - in: query
+          name: img
+          schema:
+            type: jpeg
+          required: true
+          description: "Zdjęcie do którego będzie wystawiona diagnoza"
+      operationId: diagnoza
+      description: "Pobieranie zdjęcia"
+      responses:
+        '200':
+          description: "JSON z diagnoza"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponseSuccess"
+        '401':
+          description: 'Failed to generate JSON'
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponseFailure"
