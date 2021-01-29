@@ -6,7 +6,7 @@ import templates
 import diagnose
 
 UPLOAD_FOLDER = '/home/ruxuge/PycharmProjects/TeleMed_Api/uploads'
-ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
+ALLOWED_EXTENSIONS = {'jpeg'}
 
 app = Flask(__name__.split('.')[0])
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
@@ -20,32 +20,37 @@ api = Api(app)
 def upload_file():
     if request.method == 'POST':
         if request.files:
-            file = request.files['img1.jpeg']
-            file.save('/home/ruxuge/PycharmProjects/TeleMed_Api/uploads/img1.jpeg')
-        elif request.path:
-            return print("bad value")
+            file = request.files['image.jpeg']
+            file.save('/home/ruxuge/PycharmProjects/TeleMed_Api/uploads/image.jpeg')
+        elif request.method == 'POST':
+            return noValue()
         var = diagnose.main('uploads/img1.jpeg')
         return goodResponse(var)
-    else:
-        return badResponse()
+    elif request.method != 'POST':
+        return badRequest()
 
 
 @app.route('/goodResponse')
 def goodResponse(var):
-    return 'Image is sent and result is '
+    return 'Image is sent'
     # return res
 
 
-@app.route('/badResponse')
-def badResponse():
-    return 'Fail'
+@app.route('/badRequest')
+def badRequest():
+    return 'Bad Request'
+
+
+@app.route('/noValue')
+def noValue():
+    return 'Image is require'
 
 
 with app.test_request_context():
     print(url_for('goodResponse'))
-    print(url_for('badResponse'))
+    print(url_for('noValue'))
+    print(url_for('badRequest'))
 
-# api.add_resource(upload_file, '/', '/upload_file')
 
 if __name__ == '__main__':
     app.run(port='5000')
